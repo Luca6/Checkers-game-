@@ -9,6 +9,7 @@ public class Panel extends JPanel{
     private boolean firstClickB = true;
     private boolean firstClickR = true;
     private int[][] checkers = new int[8][8];
+    private int turn=0;
     private int fx;
     private int fy;
     private Checker[][] checkArray = new Checker[8][8];
@@ -18,6 +19,7 @@ public class Panel extends JPanel{
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 sort(e.getX(), e.getY());
+
             }
         });
 
@@ -27,51 +29,53 @@ public class Panel extends JPanel{
         int xpos = 0;
         int ypos = 0;
 
-        for (int i=0; i<8; i++){
+        for (int i=0; i<9; i++){
             if (x<i*100){
                 xpos=i-1;
                 break;
             }
         }
 
-        for (int i=0; i<8; i++){
+        for (int i=0; i<9; i++){
             if (y<i*100){
                 ypos=i-1;
                 break;
             }
         }
 
-        if (checkers[xpos][ypos]==1 && firstClickB == true){
+        System.out.println(xpos + " " + ypos);
+
+
+        if (firstClickR == false){
+            moveR(xpos, ypos);
+            checkWin();
+            repaint();
+            turn=0;
+            //checkKing();
+        }
+
+        if (firstClickB == false){
+            moveB(xpos, ypos);
+            checkWin();
+            repaint();
+            turn=1;
+            //checkKing();
+        }
+
+        if (checkers[xpos][ypos]==1 && firstClickB == true  && turn==0){
             firstClickB = false;
             fx = xpos;
             fy = ypos;
+
         }
 
-        else if (checkers[xpos][ypos]==2 && firstClickR == true){
+        else if (checkers[xpos][ypos]==2 && firstClickR == true  && turn==1){
             firstClickR = false;
             fx = xpos;
             fy = ypos;
         }
 
-        if (firstClickR == false){
-            moveR(xpos, ypos, fx, fy);
-            checkWin();
-            repaint();
-            //checkKing();
-        }
-        else{
-            firstClickR = true;
-        }
 
-        if (firstClickB == false){
-            moveB(xpos, ypos, fx, fy);
-            checkWin();
-            repaint();
-            //checkKing();
-        }
-        else{
-            firstClickB = true;
-        }
 
     }
 
@@ -90,15 +94,15 @@ public class Panel extends JPanel{
             }
         }
 
-        if (winB == true){
+        if (winB){
             System.out.println("YOU WIN");
         }
-        if (winR == true){
+        if (winR){
             System.out.println("YOU LOST");
         }
     }
 
-    public void moveB(int xpos, int ypos, int fx, int fy){
+    public void moveB(int xpos, int ypos){
         //TO THE RIGHT
         if ((fx == xpos+1) && (fy==ypos-1)){
             //SIMPLE MOVE
@@ -143,9 +147,10 @@ public class Panel extends JPanel{
         repaint();
     }
 
-    public void moveR(int xpos, int ypos, int fx, int fy){
+    public void moveR(int xpos, int ypos){
         //TO THE LEFT
         if ((fx == xpos+1) && (fy==ypos+1)){
+
             //SIMPLE MOVE
             if (checkers[xpos][ypos]==0) {
                 checkers[xpos][ypos] = 2;
@@ -155,7 +160,7 @@ public class Panel extends JPanel{
             }
             //STEAL PIECE
             else if (checkers[xpos][ypos]==1){
-                if (checkers[xpos-1][ypos-1]==0){
+                    if (checkers[xpos-1][ypos-1]==0){
                     checkers[xpos-1][ypos-1]=2;
                     checkers[xpos][ypos]=0;
                     checkers[fx][fy] = 0;
@@ -166,17 +171,15 @@ public class Panel extends JPanel{
         }
         //TO THE RIGHT
         else if ((fx == xpos-1) && (fy==ypos+1)){
+
             if (checkers[xpos][ypos]==0) {
-                System.out.println("2");
                 checkers[xpos][ypos] = 2;
                 checkers[fx][fy] = 0;
                 checkArray[xpos][ypos].color = Color.RED;
-
             }
+
             else if (checkers[xpos][ypos]==1){
-                System.out.println("1");
                 if (checkers[xpos+1][ypos-1]==0){
-                    System.out.println("2");
                     checkers[xpos+1][ypos-1]=2;
                     checkers[xpos][ypos]=0;
                     checkers[fx][fy] = 0;
@@ -184,10 +187,7 @@ public class Panel extends JPanel{
                 }
             }
             firstClickR = true;
-
-
         }
-
     }
 
     public void paint (Graphics g) {
