@@ -8,6 +8,7 @@ public class Panel extends JPanel{
     private boolean first = true;
     private boolean firstClickB = true;
     private boolean firstClickR = true;
+    private boolean keepGoing = false;
     private int[][] checkers = new int[8][8];
     private int turn=0;
     private int fx;
@@ -110,6 +111,7 @@ public class Panel extends JPanel{
                 checkers[xpos][ypos] = 1;
                 checkers[fx][fy] = 0;
                 checkArray[xpos][ypos].color = Color.BLUE;
+                firstClickB = true;
 
             }
             //STEAL PIECE
@@ -121,15 +123,15 @@ public class Panel extends JPanel{
                     checkArray[xpos-1][ypos+1].color = Color.BLUE;
                 }
             }
-            firstClickB = true;
+
         }
         //TO THE LEFT
         else if ((fx == xpos-1) && (fy==ypos-1)){
             if (checkers[xpos][ypos]==0) {
-
                 checkers[fx][fy] = 0;
                 checkArray[xpos][ypos].color = Color.BLUE;
                 checkers[xpos][ypos] = 1;
+                firstClickB = true;
 
             }
             else if (checkers[xpos][ypos]==2){
@@ -140,7 +142,7 @@ public class Panel extends JPanel{
                     checkArray[xpos+1][ypos+1].color = Color.BLUE;
                 }
             }
-            firstClickB = true;
+
 
 
         }
@@ -156,6 +158,7 @@ public class Panel extends JPanel{
                 checkers[xpos][ypos] = 2;
                 checkers[fx][fy] = 0;
                 checkArray[xpos][ypos].color = Color.RED;
+                firstClickR = true;
 
             }
             //STEAL PIECE
@@ -167,7 +170,7 @@ public class Panel extends JPanel{
                     checkArray[xpos-1][ypos-1].color = Color.RED;
                 }
             }
-            firstClickR = true;
+
         }
         //TO THE RIGHT
         else if ((fx == xpos-1) && (fy==ypos+1)){
@@ -176,6 +179,7 @@ public class Panel extends JPanel{
                 checkers[xpos][ypos] = 2;
                 checkers[fx][fy] = 0;
                 checkArray[xpos][ypos].color = Color.RED;
+                firstClickR = true;
             }
 
             else if (checkers[xpos][ypos]==1){
@@ -186,7 +190,7 @@ public class Panel extends JPanel{
                     checkArray[xpos+1][ypos-1].color = Color.RED;
                 }
             }
-            firstClickR = true;
+
         }
     }
 
